@@ -1,20 +1,46 @@
-<<<<<<< HEAD
+/* Root and General Styles */
+:root {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: #333;
+  background-color: #f0f2f5;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+}
+
 #root {
+  width: 100%;
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
 }
 
+/* Logo Styles */
 .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -34,45 +60,6 @@
   }
 }
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-=======
-/* General Styles */
-:root {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color-scheme: light dark;
-  color: #333; /* Darker text for readability */
-  background-color: #f0f2f5; /* Light grey background */
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; /* Align content to the top */
-  padding: 20px;
-}
-
-#root {
-  width: 100%;
-  max-width: 1200px; /* Max width for the app container */
-  margin: 0 auto;
-  padding: 0;
-  text-align: center;
-}
-
 /* App Container */
 .app-container {
   background-color: #ffffff;
@@ -83,9 +70,10 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 700px; /* Minimum height for dashboard */
+  min-height: 700px;
 }
 
+/* Headings */
 h1 {
   font-size: 2.8em;
   color: #2c3e50;
@@ -108,7 +96,7 @@ h3 {
   margin-bottom: 15px;
 }
 
-/* Cards/Sections */
+/* Cards */
 .card {
   background-color: #ffffff;
   border: 1px solid #e9ecef;
@@ -121,9 +109,14 @@ h3 {
   text-align: left;
 }
 
+/* Documentation Link */
+.read-the-docs {
+  color: #888;
+}
+
 /* Buttons */
 button {
-  background-color: #4CAF50; /* A pleasant green */
+  background-color: #4CAF50;
   color: white;
   padding: 12px 25px;
   border: none;
@@ -144,7 +137,7 @@ button:active {
 }
 
 button.secondary {
-  background-color: #008CBA; /* Blue */
+  background-color: #008CBA;
 }
 
 button.secondary:hover {
@@ -152,7 +145,7 @@ button.secondary:hover {
 }
 
 button.danger {
-  background-color: #f44336; /* Red */
+  background-color: #f44336;
 }
 
 button.danger:hover {
@@ -176,13 +169,13 @@ button.danger:hover {
 .form-group select,
 .form-group textarea,
 .form-group input[type="password"] {
-  width: calc(100% - 24px); /* Account for padding and border */
+  width: calc(100% - 24px);
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 1em;
   margin-top: 5px;
-  box-sizing: border-box; /* Include padding in width */
+  box-sizing: border-box;
 }
 
 .form-group textarea {
@@ -191,7 +184,7 @@ button.danger:hover {
 }
 
 .error-message {
-  color: #dc3545; /* Red for errors */
+  color: #dc3545;
   font-size: 0.9em;
   margin-top: 5px;
   text-align: left;
@@ -235,16 +228,15 @@ table tbody tr:hover {
   color: white;
 }
 
-.status-badge.Present { background-color: #28a745; } /* Green */
-.status-badge.Absent { background-color: #dc3545; } /* Red */
-.status-badge.Leave { background-color: #ffc107; } /* Orange */
-.status-badge.Pending { background-color: #007bff; } /* Blue */
+.status-badge.Present { background-color: #28a745; }
+.status-badge.Absent { background-color: #dc3545; }
+.status-badge.Leave { background-color: #ffc107; }
+.status-badge.Pending { background-color: #007bff; }
 .status-badge.Approved { background-color: #28a745; }
 .status-badge.Rejected { background-color: #f44336; }
 .status-badge.ClockedIn { background-color: #4CAF50; }
 .status-badge.ClockedOut { background-color: #f44336; }
 .status-badge.OnLeave { background-color: #ffc107; }
-
 
 /* Navigation */
 .navbar {
@@ -354,4 +346,3 @@ table tbody tr:hover {
   color: #666;
   margin: 3px 0;
 }
->>>>>>> 53fcf48 (Initial commit for frontend)

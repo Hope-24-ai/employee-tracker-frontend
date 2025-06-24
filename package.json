@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
   "name": "employee-tracker-frontend",
-=======
-  "name": "employee-dashboard-app",
->>>>>>> 53fcf48 (Initial commit for frontend)
   "private": true,
   "version": "0.0.0",
   "type": "module",
