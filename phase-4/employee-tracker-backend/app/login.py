@@ -3,20 +3,19 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from app.models import db, Employee, Admin
 
-app = Flask(__name__)
-app.secret_key = "super-secret"  # Replace with a secure key in production
 
-# Enable CORS for React frontend
+
+app = Flask(__name__)
+app.secret_key = "super-secret"
+
 CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
 
-# Database config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Initialize the database
 db.init_app(app)
 
-# ✅ Add the login route directly here
+
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -47,10 +46,9 @@ def login():
 
     return jsonify({"error": "Invalid credentials"}), 401
 
-# Only run the app when executing this file directly
 if __name__ == "__main__":
     with app.app_context():
-        db.create_all()  # Optional: ensures tables are created
+        db.create_all()
     app.run(debug=True)
 
 
