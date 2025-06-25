@@ -3,82 +3,119 @@ import SignInOutButton from './SignInOutButton';
 import LeaveRequestForm from './LeaveRequestForm';
 import RecentAttendance from './RecentAttendance';
 import MyLeaveStatus from './MyLeaveStatus';
-import {
-  employees,
-  attendanceRecords,
-  leaveRequests,
-  addAttendanceRecord,
-  updateAttendanceRecord,
-  addLeaveRequest
-} from '../data/mockData'; 
 
 function AttendanceAndLeave({ employeeId }) {
   const [myAttendance, setMyAttendance] = useState([]);
   const [myLeaveRequests, setMyLeaveRequests] = useState([]);
-  const [clockedIn, setClockedIn] = useState(false); 
+  const [clockedIn, setClockedIn] = useState(false);
   const [currentAttendanceRecordId, setCurrentAttendanceRecordId] = useState(null);
 
-  
+  const API = 'http://localhost:3000';
+
   useEffect(() => {
-    
-    setMyAttendance(attendanceRecords.filter(record => record.employeeId === employeeId));
-    
-    setMyLeaveRequests(leaveRequests.filter(request => request.employeeId === employeeId));
+    const fetchData = async () => {
+      const resAtt = await fetch(`${API}/attendanceRecords`);
+      const resLeave = await fetch(`${API}/leaveRequests`);
 
-    
-    const today = new Date().toISOString().split('T')[0];
-    const todayRecord = attendanceRecords.find(
-      record => record.employeeId === employeeId && record.date === today && record.checkOut === null
-    );
-    if (todayRecord) {
-      setClockedIn(true);
-      setCurrentAttendanceRecordId(todayRecord.id);
-    } else {
-      setClockedIn(false);
-      setCurrentAttendanceRecordId(null);
-    }
-  }, [employeeId, attendanceRecords.length, leaveRequests.length]); 
+      const allAttendance = await resAtt.json();
+      const allLeaves = await resLeave.json();
 
-  const handleClockIn = () => {
+      const filteredAttendance = allAttendance.filter(rec => rec.employeeId === employeeId);
+      const filteredLeaves = allLeaves.filter(rec => rec.employeeId === employeeId);
+
+      setMyAttendance(filteredAttendance);
+      setMyLeaveRequests(filteredLeaves);
+
+      const today = new Date().toISOString().split('T')[0];
+      const todayRecord = filteredAttendance.find(
+        rec => rec.date === today && rec.checkOut === null
+      );
+
+      if (todayRecord) {
+        setClockedIn(true);
+        setCurrentAttendanceRecordId(todayRecord.id);
+      } else {
+        setClockedIn(false);
+        setCurrentAttendanceRecordId(null);
+      }
+    };
+
+    fetchData();
+  }, [employeeId]);
+
+  const handleClockIn = async () => {
     const today = new Date();
     const dateString = today.toISOString().split('T')[0];
-    const timeString = today.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+    const timeString = today.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    });
 
-    const newRecord = addAttendanceRecord({
-      employeeId: employeeId,
+    const newRecord = {
+      employeeId,
       date: dateString,
       status: 'Present',
       checkIn: timeString,
       checkOut: null,
-      details: 'Clocked In'
+      details: 'Clocked In',
+    };
+
+    const res = await fetch(`${API}/attendanceRecords`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newRecord),
     });
-    setMyAttendance([...myAttendance, newRecord]); 
+
+    const savedRecord = await res.json();
+    setMyAttendance([...myAttendance, savedRecord]);
     setClockedIn(true);
-    setCurrentAttendanceRecordId(newRecord.id);
+    setCurrentAttendanceRecordId(savedRecord.id);
     alert(`Clocked in at ${timeString}`);
   };
 
-  const handleClockOut = () => {
-    const today = new Date();
-    const timeString = today.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+  const handleClockOut = async () => {
+    if (!currentAttendanceRecordId) return;
 
-    if (currentAttendanceRecordId) {
-      const updatedRecord = updateAttendanceRecord(currentAttendanceRecordId, { checkOut: timeString });
-      if (updatedRecord) {
-        setMyAttendance(myAttendance.map(rec => rec.id === updatedRecord.id ? updatedRecord : rec));
-      }
-    }
+    const today = new Date();
+    const timeString = today.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    });
+
+    const res = await fetch(`${API}/attendanceRecords/${currentAttendanceRecordId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ checkOut: timeString }),
+    });
+
+    const updatedRecord = await res.json();
+    const updatedAttendance = myAttendance.map(rec =>
+      rec.id === updatedRecord.id ? updatedRecord : rec
+    );
+
+    setMyAttendance(updatedAttendance);
     setClockedIn(false);
     setCurrentAttendanceRecordId(null);
     alert(`Clocked out at ${timeString}`);
   };
 
-  const handleLeaveSubmit = (leaveData) => {
-    const newRequest = addLeaveRequest({
+  const handleLeaveSubmit = async (leaveData) => {
+    const newRequest = {
       ...leaveData,
-      employeeId: employeeId,
+      employeeId,
+      status: 'Pending',
+    };
+
+    const res = await fetch(`${API}/leaveRequests`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newRequest),
     });
-    setMyLeaveRequests([...myLeaveRequests, newRequest]);
+
+    const savedRequest = await res.json();
+    setMyLeaveRequests([...myLeaveRequests, savedRequest]);
     alert('Your leave request has been submitted successfully!');
   };
 

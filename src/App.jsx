@@ -1,24 +1,30 @@
-import React, { useState } from 'react';
-import EmployeeDashboard from './components/EmployeeDashboard';
+import React, { useState, useEffect } from 'react';
 import LoginScreen from './components/LoginScreen';
-import './App.css'; 
+import EmployeeDashboard from './components/EmployeeDashboard';
+import './App.css';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentEmployeeId, setCurrentEmployeeId] = useState(null);
 
-  const handleLogin = (employeeId) => {
-    if (employeeId) {
-      setCurrentEmployeeId(employeeId);
+  useEffect(() => {
+    const savedId = localStorage.getItem('employeeId');
+    if (savedId) {
+      setCurrentEmployeeId(savedId);
       setIsLoggedIn(true);
-    } else {
-      alert('Please enter your Employee ID.');
     }
+  }, []);
+
+  const handleLogin = (employeeId) => {
+    setCurrentEmployeeId(employeeId);
+    setIsLoggedIn(true);
+    localStorage.setItem('employeeId', employeeId); // persist login
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
     setCurrentEmployeeId(null);
+    setIsLoggedIn(false);
+    localStorage.removeItem('employeeId');
   };
 
   return (
@@ -26,10 +32,7 @@ function App() {
       {!isLoggedIn ? (
         <LoginScreen onLogin={handleLogin} />
       ) : (
-        <EmployeeDashboard
-          employeeId={currentEmployeeId}
-          onLogout={handleLogout}
-        />
+        <EmployeeDashboard employeeId={currentEmployeeId} onLogout={handleLogout} />
       )}
     </div>
   );

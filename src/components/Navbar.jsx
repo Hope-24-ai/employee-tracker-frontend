@@ -13,7 +13,7 @@ function Navbar({ activeView, onSelectView }) {
         className={activeView === 'team' ? 'active' : ''}
         onClick={() => onSelectView('team')}
       >
-        Team Roster
+        Team Members
       </button>
       <button
         className={activeView === 'attendanceLeave' ? 'active' : ''}

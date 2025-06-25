@@ -3,23 +3,24 @@ import Navbar from './Navbar';
 import MyProfile from './MyProfile';
 import TeamRoster from './TeamRoster';
 import AttendanceAndLeave from './AttendanceAndLeave';
-import { employees } from '../data/mockData'; 
 
 function EmployeeDashboard({ employeeId, onLogout }) {
   const [activeView, setActiveView] = useState('profile'); 
   const [currentEmployee, setCurrentEmployee] = useState(null);
 
-  
   useEffect(() => {
-    const employee = employees.find(emp => emp.id === employeeId);
-    if (employee) {
-      setCurrentEmployee(employee);
-    } else {
-    
-      console.error("Employee not found after login, logging out.");
-      onLogout();
-    }
-  }, [employeeId, onLogout]); 
+    fetch(`http://localhost:3000/employees/${employeeId}`)
+      .then(res => {
+        if (!res.ok) throw new Error("Employee not found");
+        return res.json();
+      })
+      .then(data => setCurrentEmployee(data))
+      .catch(error => {
+        console.error("Error fetching employee:", error);
+        onLogout(); // Log out if employee not found
+      });
+  }, [employeeId, onLogout]);
+
   if (!currentEmployee) {
     return <div className="card">Loading employee data...</div>; 
   }

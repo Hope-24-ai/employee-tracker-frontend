@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { employees } from '../data/mockData'; 
 
 function LoginScreen({ onLogin }) {
   const [employeeId, setEmployeeId] = useState('');
@@ -7,19 +6,24 @@ function LoginScreen({ onLogin }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError(''); 
-    
-    const foundEmployee = employees.find(emp => emp.id === employeeId.toUpperCase());
+    setError('');
 
-    if (foundEmployee) {
-      onLogin(foundEmployee.id); 
-    } else {
-      setError('Invalid Employee ID. Please try again (e.g., EMP001, EMP002).');
-    }
+    fetch(`http://localhost:3000/employees?id=${employeeId}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.length > 0) {
+          onLogin(data[0].id); // Pass the employee's ID
+        } else {
+          setError('Invalid Employee ID. Please try again (e.g., EMP001, EMP002).');
+        }
+      })
+      .catch(() => {
+        setError('Failed to connect to server. Is json-server running?');
+      });
   };
 
   return (
-    <div className="card" style={{ maxWidth: '400px', margin: '50px auto' }}>
+    <div className="card login-card">
       <h2>Employee Login</h2>
       <p>Enter your Employee ID to access the dashboard.</p>
       <form onSubmit={handleSubmit}>
@@ -29,7 +33,7 @@ function LoginScreen({ onLogin }) {
             type="text"
             id="employeeId"
             value={employeeId}
-            onChange={(e) => setEmployeeId(e.target.value.toUpperCase())} 
+            onChange={(e) => setEmployeeId(e.target.value.toUpperCase())}
             placeholder="e.g., EMP001"
             required
           />

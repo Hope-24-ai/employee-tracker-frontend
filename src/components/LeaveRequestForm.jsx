@@ -1,50 +1,72 @@
 import React, { useState } from 'react';
 
-function LeaveRequestForm({ onSubmit }) {
+function LeaveRequestForm({ employeeId, onSuccess }) {
   const [leaveType, setLeaveType] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [reason, setReason] = useState('');
   const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
 
   const validateForm = () => {
     const newErrors = {};
     if (!leaveType) newErrors.leaveType = 'Leave type is required.';
     if (!startDate) newErrors.startDate = 'Start Date is required.';
     if (!endDate) newErrors.endDate = 'End Date is required.';
-
     if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
       newErrors.endDate = 'End Date cannot be before Start Date.';
     }
-
     if (!reason.trim()) newErrors.reason = 'Reason is required.';
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      onSubmit({
-        leaveType,
-        startDate,
-        endDate,
-        reason,
+    if (!validateForm()) return;
+
+    const newRequest = {
+      employeeId,
+      type: leaveType,
+      startDate,
+      endDate,
+      reason,
+      status: 'Pending',
+    };
+
+    setSubmitting(true);
+
+    try {
+      const res = await fetch('http://localhost:3000/leaveRequests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newRequest),
       });
-      
+
+      if (!res.ok) throw new Error('Failed to submit leave request');
+
+      const data = await res.json();
+      if (onSuccess) onSuccess(data);
+
       setLeaveType('');
       setStartDate('');
       setEndDate('');
       setReason('');
       setErrors({});
+    } catch (error) {
+      console.error('Error:', error.message);
+      alert('Failed to submit leave request.');
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="card">
+      <h3>Request Leave</h3>
+
       <div className="form-group">
-        <label htmlFor="leaveType">Leave Type:</label>
+        <label htmlFor="leaveType">Leave Type</label>
         <select
           id="leaveType"
           value={leaveType}
@@ -61,7 +83,7 @@ function LeaveRequestForm({ onSubmit }) {
       </div>
 
       <div className="form-group">
-        <label htmlFor="startDate">Start Date:</label>
+        <label htmlFor="startDate">Start Date</label>
         <input
           type="date"
           id="startDate"
@@ -72,7 +94,7 @@ function LeaveRequestForm({ onSubmit }) {
       </div>
 
       <div className="form-group">
-        <label htmlFor="endDate">End Date:</label>
+        <label htmlFor="endDate">End Date</label>
         <input
           type="date"
           id="endDate"
@@ -83,17 +105,19 @@ function LeaveRequestForm({ onSubmit }) {
       </div>
 
       <div className="form-group">
-        <label htmlFor="reason">Reason:</label>
+        <label htmlFor="reason">Reason</label>
         <textarea
           id="reason"
           value={reason}
           onChange={(e) => setReason(e.target.value)}
           placeholder="Briefly describe your reason for leave..."
-        ></textarea>
+        />
         {errors.reason && <p className="error-message">{errors.reason}</p>}
       </div>
 
-      <button type="submit">Submit Request</button>
+      <button type="submit" disabled={submitting}>
+        {submitting ? 'Submitting...' : 'Submit Request'}
+      </button>
     </form>
   );
 }
