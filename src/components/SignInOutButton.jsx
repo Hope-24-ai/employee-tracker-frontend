@@ -7,7 +7,7 @@ function SignInOutButton({ employeeId }) {
   useEffect(() => {
     const today = new Date().toISOString().split('T')[0];
 
-    fetch(`http://localhost:3000/attendanceRecords?employeeId=${employeeId}&date=${today}`)
+    fetch(`http://localhost:3001/attendanceRecords?employeeId=${employeeId}&date=${today}`)
       .then(res => res.json())
       .then(data => {
         const record = data.find(rec => rec.checkOut === null);
@@ -32,7 +32,7 @@ function SignInOutButton({ employeeId }) {
       details: 'Clocked In'
     };
 
-    fetch('http://localhost:3000/attendanceRecords', {
+    fetch('http://localhost:3001/attendanceRecords', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newRecord)
@@ -48,7 +48,7 @@ function SignInOutButton({ employeeId }) {
   const handleClockOut = () => {
     const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
 
-    fetch(`http://localhost:3000/attendanceRecords/${currentRecordId}`, {
+    fetch(`http://localhost:3001/attendanceRecords/${currentRecordId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ checkOut: time })

@@ -10,7 +10,7 @@ function AttendanceAndLeave({ employeeId }) {
   const [clockedIn, setClockedIn] = useState(false);
   const [currentAttendanceRecordId, setCurrentAttendanceRecordId] = useState(null);
 
-  const API = 'http://localhost:3000';
+  const API = 'http://localhost:3001';
 
   useEffect(() => {
     const fetchData = async () => {

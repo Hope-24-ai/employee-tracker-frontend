@@ -5,7 +5,7 @@ function RecentAttendance({ employeeId }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/attendanceRecords?employeeId=${employeeId}`)
+    fetch(`http://localhost:3001/attendanceRecords?employeeId=${employeeId}`)
       .then(res => res.json())
       .then(data => {
         const sorted = data.sort((a, b) => new Date(b.date) - new Date(a.date));

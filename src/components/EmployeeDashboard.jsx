@@ -9,7 +9,7 @@ function EmployeeDashboard({ employeeId, onLogout }) {
   const [currentEmployee, setCurrentEmployee] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/employees/${employeeId}`)
+    fetch(`http://localhost:3001/employees/${employeeId}`)
       .then(res => {
         if (!res.ok) throw new Error("Employee not found");
         return res.json();

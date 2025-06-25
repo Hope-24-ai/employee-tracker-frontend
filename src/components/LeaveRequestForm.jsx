@@ -37,7 +37,7 @@ function LeaveRequestForm({ employeeId, onSuccess }) {
     setSubmitting(true);
 
     try {
-      const res = await fetch('http://localhost:3000/leaveRequests', {
+      const res = await fetch('http://localhost:3001/leaveRequests', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newRequest),

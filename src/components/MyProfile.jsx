@@ -6,7 +6,7 @@ function MyProfile({ employee }) {
   useEffect(() => {
     if (!employee?.departmentId) return;
 
-    fetch(`http://localhost:3000/departments/${employee.departmentId}`)
+    fetch(`http://localhost:3001/departments/${employee.departmentId}`)
       .then(res => {
         if (!res.ok) throw new Error('Department not found');
         return res.json();

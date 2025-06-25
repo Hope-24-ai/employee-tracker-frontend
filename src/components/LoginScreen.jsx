@@ -8,7 +8,7 @@ function LoginScreen({ onLogin }) {
     e.preventDefault();
     setError('');
 
-    fetch(`http://localhost:3000/employees?id=${employeeId}`)
+    fetch(`http://localhost:3001/employees?id=${employeeId}`)
       .then(res => res.json())
       .then(data => {
         if (data.length > 0) {

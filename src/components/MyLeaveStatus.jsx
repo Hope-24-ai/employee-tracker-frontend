@@ -5,7 +5,7 @@ function MyLeaveStatus({ employeeId }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/leaveRequests?employeeId=${employeeId}`)
+    fetch(`http://localhost:3001/leaveRequests?employeeId=${employeeId}`)
       .then(res => res.json())
       .then(data => {
         const sorted = data.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));

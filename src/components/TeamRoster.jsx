@@ -6,7 +6,7 @@ function TeamRoster({ currentEmployeeId }) {
 
   useEffect(() => {
     // Fetch employees
-    fetch('http://localhost:3000/employees')
+    fetch('http://localhost:3001/employees')
       .then(res => res.json())
       .then(data => {
         const filtered = data.filter(emp => emp.id !== currentEmployeeId);
@@ -17,7 +17,7 @@ function TeamRoster({ currentEmployeeId }) {
       });
 
     // Fetch departments
-    fetch('http://localhost:3000/departments')
+    fetch('http://localhost:3001/departments')
       .then(res => res.json())
       .then(data => {
         const departmentMap = {};
