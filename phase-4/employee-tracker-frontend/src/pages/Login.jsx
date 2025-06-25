@@ -1,4 +1,3 @@
-// src/pages/Login.jsx
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -7,12 +6,11 @@ export default function Login() {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
 
-
   const onSubmit = async (data) => {
     try {
-      const response = await fetch("http://localhost:5000/login", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login`, {
         method: "POST",
-        credentials: "include", 
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -34,30 +32,43 @@ export default function Login() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="p-6 max-w-sm mx-auto flex flex-col gap-4"
-    >
-      <input
-        {...register("email")}
-        type="email"
-        placeholder="Email"
-        required
-        className="input border border-gray-300 p-2 rounded"
-      />
-      <input
-        {...register("password")}
-        type="password"
-        placeholder="Password"
-        required
-        className="input border border-gray-300 p-2 rounded"
-      />
-      <button
-        type="submit"
-        className="btn bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300"
-      >
-        Login
-      </button>
-    </form>
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-10 space-y-6 transition-all duration-300">
+        <h2 className="text-4xl font-extrabold text-center text-gray-800 tracking-tight">
+          Sign In
+        </h2>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Email</label>
+            <input
+              {...register("email")}
+              type="email"
+              required
+              className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Password</label>
+            <input
+              {...register("password")}
+              type="password"
+              required
+              className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-xl shadow-md transition-all duration-300"
+          >
+            Log In
+          </button>
+        </form>
+        <p className="text-xs text-center text-gray-400 pt-4">
+          &copy; {new Date().getFullYear()} Employee Tracker App
+        </p>
+      </div>
+    </div>
   );
 }
