@@ -8,19 +8,24 @@ export default function App() {
   return (
     <Router>
       <Routes>
+        {/* Public route for login */}
         <Route path="/" element={<Login />} />
+
+        {/* Protected route for admin */}
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["admin"]}>
               <Dashboard />
             </ProtectedRoute>
           }
         />
+
+        {/* Protected route for employee */}
         <Route
           path="/employee-home"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["employee"]}>
               <EmployeeHome />
             </ProtectedRoute>
           }

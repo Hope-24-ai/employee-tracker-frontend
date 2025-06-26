@@ -18,6 +18,7 @@ export default function Login() {
       });
 
       const result = await response.json();
+      console.log("Login response:", result); // 👈 Added here to log backend response
 
       if (response.ok) {
         localStorage.setItem("user", JSON.stringify(result));
@@ -28,6 +29,7 @@ export default function Login() {
       }
     } catch (error) {
       toast.error("Server error. Please try again.");
+      console.error("Login fetch error:", error); //  Added here to log network or parsing errors
     }
   };
 
@@ -72,3 +74,4 @@ export default function Login() {
     </div>
   );
 }
+
