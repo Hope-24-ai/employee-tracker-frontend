@@ -1,24 +1,58 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+.pipenv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+.mypy_cache/
+.dmypy.json
+.ruff_cache/
+htmlcov/
+build/
+develop-eggs/
+dist/
+eggs/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Flask specific
+instance/
+.flaskenv
+
+# Database
+*.sqlite
+*.sqlite3
+*.db
+*.db-*journal # For SQLite journal files
+
 # Logs
-logs
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+logs/
+*.json.log
 
-node_modules
-dist
-dist-ssr
-*.local
+# Operating System specific
+.DS_Store # macOS
+Thumbs.db # Windows
+desktop.ini # Windows
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# IDEs
+.idea/ # IntelliJ / PyCharm
+.vscode/ # VS Code (uncomment if you don't want to share settings)
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+
+# Environment variables
+.env
