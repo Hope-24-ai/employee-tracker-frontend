@@ -7,7 +7,6 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentEmployeeId, setCurrentEmployeeId] = useState(null);
 
-  // Restore login if employeeId is saved
   useEffect(() => {
     const savedId = localStorage.getItem('employeeId');
     if (savedId) {
@@ -17,16 +16,15 @@ function App() {
   }, []);
 
   const handleLogin = (employeeId) => {
-    const normalizedId = employeeId.toUpperCase();
-    setCurrentEmployeeId(normalizedId);
+    localStorage.setItem('employeeId', employeeId.toUpperCase());
+    setCurrentEmployeeId(employeeId.toUpperCase());
     setIsLoggedIn(true);
-    localStorage.setItem('employeeId', normalizedId);
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('employeeId');
     setCurrentEmployeeId(null);
     setIsLoggedIn(false);
-    localStorage.removeItem('employeeId');
   };
 
   return (

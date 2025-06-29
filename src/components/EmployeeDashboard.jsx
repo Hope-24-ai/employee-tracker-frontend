@@ -1,78 +1,67 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import MyProfile from './MyProfile';
 import TeamRoster from './TeamRoster';
 import AttendanceAndLeave from './AttendanceAndLeave';
-import { getEmployeeByUniqueStringId } from '../utils/api'; 
+import { getEmployeeByUniqueStringId } from '../utils/api';
 
 function EmployeeDashboard({ employeeId, onLogout }) {
   const [activeView, setActiveView] = useState('profile');
   const [currentEmployee, setCurrentEmployee] = useState(null);
-  const [loadingError, setLoadingError] = useState(null); 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
-    
-    setCurrentEmployee(null);
-    setLoadingError(null);
-
-    const fetchEmployeeData = async () => {
+    const fetchEmployee = async () => {
       try {
-        
+        setLoading(true);
         const data = await getEmployeeByUniqueStringId(employeeId);
-
-        if (data) {
-          
-          setCurrentEmployee(data);
+        if (!data) {
+          setError('Employee not found.');
         } else {
-          
-          setLoadingError("Employee data not found or invalid ID. Please log in again.");
-          onLogout(); 
+          setCurrentEmployee(data);
         }
-      } catch (error) {
-        console.error("Error fetching employee in dashboard:", error);
-        
-        setLoadingError(`Failed to load employee data: ${error.message}. Please try again.`);
-        onLogout(); 
+      } catch (err) {
+        console.error(err);
+        setError('Failed to load employee data.');
+      } finally {
+        setLoading(false);
       }
     };
 
-    
     if (employeeId) {
-      fetchEmployeeData();
+      fetchEmployee();
     } else {
-      
-      setLoadingError("No employee ID provided. Redirecting to login.");
-      onLogout();
+      setError('Missing employee ID.');
     }
-  }, [employeeId, onLogout]); 
-  if (!currentEmployee && !loadingError) {
-    return <div className="card">Loading employee data...</div>;
+  }, [employeeId]);
+
+  if (loading) {
+    return <div className="card">Loading...</div>;
   }
 
-  
-  if (loadingError) {
+  if (error) {
     return (
       <div className="card error-message">
-        <p>{loadingError}</p>
-        <button onClick={onLogout}>Go Back to Login</button>
+        <p>{error}</p>
+        <button onClick={onLogout}>Log out</button>
       </div>
     );
   }
 
-  
   return (
     <>
-      <div className="dashboard-header" style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
-        <h1 style={{ marginBottom: 0 }}>Welcome, {currentEmployee.name}!</h1>
+      <div className="dashboard-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h1>Welcome, {currentEmployee.name}!</h1>
         <button onClick={onLogout} className="danger">Logout</button>
       </div>
 
       <Navbar activeView={activeView} onSelectView={setActiveView} />
 
-      <div className="dashboard-content" style={{ width: '100%' }}>
+      <div className="dashboard-content">
         {activeView === 'profile' && <MyProfile employee={currentEmployee} />}
-        {}
-        {activeView === 'team' && <TeamRoster currentEmployeeId={employeeId} />}
-        {activeView === 'attendanceLeave' && <AttendanceAndLeave employeeId={employeeId} />}
+        {activeView === 'team' && <TeamRoster currentEmployeeId={currentEmployee.employeeId} />}
+        {activeView === 'attendanceLeave' && <AttendanceAndLeave employeeId={currentEmployee.employeeId} />}
       </div>
     </>
   );

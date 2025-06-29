@@ -1,304 +1,226 @@
-/* === Root and General Styles === */
 :root {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color-scheme: light dark;
-  color: #333;
-  background-color: #f0f2f5;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --primary: #2563eb;
+  --danger: #ef4444;
+  --gray-light: #f1f5f9;
+  --text-dark: #1e293b;
+  --text-muted: #64748b;
+  --card-bg: #ffffff;
+  --shadow: rgba(0, 0, 0, 0.08);
+  --radius: 12px;
+  --gap: 24px;
 }
 
 body {
   margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--gray-light);
+  color: var(--text-dark);
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 20px;
-  background-color: #e9f1fb;
+  padding: 2rem;
 }
 
 #root {
   width: 100%;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  max-width: 1440px;
 }
 
-/* === App Container === */
 .app-container {
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  padding: 30px 40px;
-  margin-top: 50px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 1000px;
+  background: var(--card-bg);
+  padding: 2.5rem;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 20px var(--shadow);
   box-sizing: border-box;
 }
 
-/* === Headings === */
-h1 {
-  font-size: 2.5rem;
-  color: #2c3e50;
-  margin-bottom: 40px;
+.dashboard-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: var(--gap);
+  width: 100%;
+}
+
+/* === Components === */
+
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  text-align: left;
+}
+
+h1, h2, h3 {
+  margin-top: 0;
+  color: var(--text-dark);
 }
 
 h2 {
-  font-size: 2rem;
-  color: #1e3a8a;
-  margin-bottom: 25px;
-  border-bottom: 2px solid #e0e0e0;
-  padding-bottom: 10px;
+  font-size: 1.75rem;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
-h3 {
-  font-size: 1.5rem;
-  color: #444;
-  margin-top: 30px;
-  margin-bottom: 15px;
-}
-
-/* === Cards === */
-.card {
-  background-color: #ffffff;
-  border: 1px solid #e9ecef;
-  border-radius: 10px;
-  padding: 25px 30px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
-  margin-bottom: 30px;
-  width: 100%;
-  box-sizing: border-box;
-  text-align: left;
-}
-
-/* === Buttons === */
 button {
-  background-color: #2563eb;
-  color: white;
-  padding: 12px 25px;
+  background: var(--primary);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: 8px;
-  cursor: pointer;
+  border-radius: var(--radius);
   font-size: 1rem;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  margin: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 button:hover {
-  background-color: #1d4ed8;
+  background: #1d4ed8;
   transform: translateY(-2px);
 }
 
-button:active {
-  transform: translateY(0);
-}
-
-button.secondary {
-  background-color: #0ea5e9;
-}
-
-button.secondary:hover {
-  background-color: #0284c7;
-}
-
 button.danger {
-  background-color: #ef4444;
+  background: var(--danger);
 }
 
 button.danger:hover {
-  background-color: #dc2626;
+  background: #dc2626;
 }
 
-/* === Forms === */
+/* === Form === */
+
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
 }
 
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: bold;
-  color: #1e3a8a;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
+input, textarea, select {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  padding: 0.75rem;
   font-size: 1rem;
-  margin-top: 5px;
-  box-sizing: border-box;
-}
-
-.form-group textarea {
-  resize: vertical;
-  min-height: 90px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  margin-top: 0.5rem;
 }
 
 .error-message {
-  color: #dc2626;
+  color: var(--danger);
   font-size: 0.9rem;
-  margin-top: 5px;
-  text-align: left;
+  margin-top: 0.25rem;
 }
 
-/* === Tables === */
+/* === Table === */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  background: white;
   font-size: 0.95rem;
-  background-color: #ffffff;
-  color: #1e3a8a;
-  border: 1px solid #cbd5e1;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  margin-top: 1rem;
 }
 
-table th, table td {
-  border: 1px solid #e2e8f0;
-  padding: 12px;
+th, td {
+  border: 1px solid #e5e7eb;
+  padding: 0.75rem;
   text-align: left;
 }
 
-table th {
-  background-color: #eff6ff;
+th {
+  background: #eff6ff;
+  color: var(--text-dark);
   font-weight: bold;
-  color: #1e3a8a;
 }
 
-table tbody tr:nth-child(odd) {
-  background-color: #f8fafc;
+tbody tr:nth-child(odd) {
+  background: #f9fafb;
 }
 
-table tbody tr:hover {
-  background-color: #e0f2fe;
-}
-
-/* === Status Badges === */
+/* === Status Badge === */
 .status-badge {
   display: inline-block;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-weight: bold;
+  padding: 0.3rem 0.75rem;
   font-size: 0.85rem;
+  font-weight: bold;
+  border-radius: 6px;
   color: white;
 }
 
-.status-badge.Present { background-color: #22c55e; }
-.status-badge.Absent { background-color: #ef4444; }
-.status-badge.Leave { background-color: #facc15; color: #000; }
-.status-badge.Pending { background-color: #3b82f6; }
-.status-badge.Approved { background-color: #16a34a; }
-.status-badge.Rejected { background-color: #dc2626; }
-.status-badge.ClockedIn { background-color: #4ade80; }
-.status-badge.ClockedOut { background-color: #f87171; }
-.status-badge.OnLeave { background-color: #fde68a; color: #000; }
+.status-badge.Present { background: #22c55e; }
+.status-badge.Absent { background: #ef4444; }
+.status-badge.Leave { background: #facc15; color: #000; }
+.status-badge.Pending { background: #3b82f6; }
+.status-badge.Approved { background: #16a34a; }
+.status-badge.Rejected { background: #dc2626; }
+.status-badge.ClockedIn { background: #4ade80; }
+.status-badge.ClockedOut { background: #f87171; }
+.status-badge.OnLeave { background: #fde68a; color: #000; }
 
 /* === Navbar === */
 .navbar {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 30px;
-  background-color: #f1f5f9;
-  padding: 12px 0;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  gap: 10px;
+  gap: 1rem;
+  background: var(--gray-light);
+  padding: 1rem;
+  border-radius: var(--radius);
+  margin-bottom: 2rem;
 }
 
 .navbar button {
   background: none;
   border: none;
-  color: #2563eb;
   font-size: 1.1rem;
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  color: var(--primary);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  transition: all 0.3s ease;
 }
 
 .navbar button:hover {
-  background-color: #dbeafe;
-  color: #1e40af;
+  background: #dbeafe;
+  color: #1d4ed8;
 }
 
 .navbar button.active {
-  background-color: #2563eb;
+  background: var(--primary);
   color: white;
   font-weight: bold;
 }
 
-.navbar button.active:hover {
-  background-color: #1d4ed8;
-}
-
-/* === Login Card === */
-.card.login-card {
-  max-width: 400px;
-  margin: 80px auto;
-  text-align: center;
-}
-
-/* === Profile Card === */
+/* === Profile === */
 .profile-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
+  text-align: center;
+  padding: 1.5rem;
 }
 
-.profile-card img {
+.profile-pic {
   width: 120px;
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid #3b82f6;
-  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
-}
-
-.profile-info {
-  text-align: center;
-}
-
-.profile-info h3 {
-  margin-bottom: 5px;
-  color: #1e3a8a;
+  border: 4px solid var(--primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
 }
 
 .profile-info p {
-  margin: 5px 0;
-  color: #334155;
-  font-size: 0.95rem;
+  margin: 0.3rem 0;
+  color: var(--text-muted);
 }
 
-/* === Team Roster === */
+/* === Grid (Team) === */
 .employee-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
+  gap: 1.5rem;
 }
 
 .employee-card {
+  background: white;
+  padding: 1rem;
   border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 20px;
+  border-radius: 10px;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease;
-  background-color: #ffffff;
+  transition: 0.3s ease;
 }
 
 .employee-card:hover {
@@ -310,52 +232,21 @@ table tbody tr:hover {
   height: 80px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 10px;
-  border: 2px solid #3b82f6;
-}
-
-.employee-card h4 {
-  margin: 10px 0 5px;
-  color: #1e3a8a;
-}
-
-.employee-card p {
-  font-size: 0.9rem;
-  color: #475569;
-  margin: 3px 0;
+  border: 3px solid var(--primary);
+  margin-bottom: 0.5rem;
 }
 
 /* === Responsive === */
 @media (max-width: 768px) {
   .app-container {
-    padding: 20px;
+    padding: 1.25rem;
   }
 
-  h1 {
-    font-size: 2rem;
+  .navbar {
+    flex-direction: column;
   }
 
-  h2 {
-    font-size: 1.6rem;
-  }
-
-  .profile-card img {
-    width: 100px;
-    height: 100px;
-  }
-
-  .employee-card img {
-    width: 70px;
-    height: 70px;
-  }
-
-  button {
-    font-size: 1rem;
-    padding: 10px 20px;
-  }
-
-  .navbar button {
-    padding: 8px 16px;
-    font-size: 1rem;
+  .dashboard-content {
+    grid-template-columns: 1fr;
   }
 }
