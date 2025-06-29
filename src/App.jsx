@@ -16,9 +16,12 @@ function App() {
   }, []);
 
   const handleLogin = (employeeId) => {
-    localStorage.setItem('employeeId', employeeId.toUpperCase());
-    setCurrentEmployeeId(employeeId.toUpperCase());
-    setIsLoggedIn(true);
+    const normalizedId = employeeId?.toUpperCase();
+    if (normalizedId) {
+      localStorage.setItem('employeeId', normalizedId);
+      setCurrentEmployeeId(normalizedId);
+      setIsLoggedIn(true);
+    }
   };
 
   const handleLogout = () => {
@@ -29,10 +32,10 @@ function App() {
 
   return (
     <div className="app-container">
-      {!isLoggedIn ? (
-        <LoginScreen onLogin={handleLogin} />
-      ) : (
+      {isLoggedIn && currentEmployeeId ? (
         <EmployeeDashboard employeeId={currentEmployeeId} onLogout={handleLogout} />
+      ) : (
+        <LoginScreen onLogin={handleLogin} />
       )}
     </div>
   );

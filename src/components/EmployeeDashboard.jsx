@@ -51,17 +51,32 @@ function EmployeeDashboard({ employeeId, onLogout }) {
 
   return (
     <>
-      <div className="dashboard-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div
+        className="dashboard-header"
+        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+      >
         <h1>Welcome, {currentEmployee.name}!</h1>
         <button onClick={onLogout} className="danger">Logout</button>
       </div>
 
-      <Navbar activeView={activeView} onSelectView={setActiveView} />
+      {/* ✅ Role passed to Navbar */}
+      <Navbar
+        activeView={activeView}
+        onSelectView={setActiveView}
+        role={currentEmployee.role}
+      />
 
       <div className="dashboard-content">
         {activeView === 'profile' && <MyProfile employee={currentEmployee} />}
-        {activeView === 'team' && <TeamRoster currentEmployeeId={currentEmployee.employeeId} />}
-        {activeView === 'attendanceLeave' && <AttendanceAndLeave employeeId={currentEmployee.employeeId} />}
+        {activeView === 'team' && currentEmployee.role === 'HR Manager' && (
+          <TeamRoster currentEmployeeId={currentEmployee.employeeId} />
+        )}
+        {activeView === 'attendanceLeave' && (
+          <AttendanceAndLeave
+            employeeId={currentEmployee.employeeId}
+            role={currentEmployee.role}
+          />
+        )}
       </div>
     </>
   );

@@ -1,39 +1,37 @@
 import React, { useState } from 'react';
-
-import { getEmployeeByUniqueStringId } from '../utils/api'; 
+import { getEmployeeByUniqueStringId } from '../utils/api';
 
 function LoginScreen({ onLogin }) {
   const [employeeId, setEmployeeId] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => { 
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(''); 
-    setLoading(true); 
-    
-    if (!employeeId.trim()) {
+    setError('');
+    setLoading(true);
+
+    const cleanedId = String(employeeId).trim().toUpperCase();
+
+    if (!cleanedId) {
       setError('Employee ID cannot be empty.');
       setLoading(false);
       return;
     }
 
     try {
-      
-      const foundEmployee = await getEmployeeByUniqueStringId(employeeId.toUpperCase()); // Ensure consistent casing
+      const foundEmployee = await getEmployeeByUniqueStringId(cleanedId);
 
       if (foundEmployee) {
-        
-        onLogin(employeeId.toUpperCase());
+        onLogin(cleanedId);
       } else {
-        
         setError('Invalid Employee ID. Please try again (e.g., EMP001, EMP002).');
       }
     } catch (err) {
       console.error('Login error:', err);
-      setError(`Failed to connect to server or fetch employee data: ${err.message || 'Please check your connection and try again.'}`);
+      setError(`Failed to connect to server or fetch employee data: ${err.message || 'Please try again.'}`);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -48,10 +46,10 @@ function LoginScreen({ onLogin }) {
             type="text"
             id="employeeId"
             value={employeeId}
-            onChange={(e) => setEmployeeId(e.target.value.toUpperCase())} 
+            onChange={(e) => setEmployeeId(e.target.value)}
             placeholder="e.g., EMP001"
             required
-            disabled={loading} 
+            disabled={loading}
           />
           {error && <p className="error-message">{error}</p>}
         </div>

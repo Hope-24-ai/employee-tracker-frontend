@@ -25,7 +25,9 @@ async function fetchData(endpoint, options = {}) {
       } catch {
         throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
       }
-      throw new Error(errorData.message || `API error! Status: ${response.status} - ${response.statusText}`);
+      throw new Error(
+        errorData?.message || errorData?.error || `API error! Status: ${response.status} - ${response.statusText}`
+      );
     }
 
     const text = await response.text();
@@ -53,22 +55,27 @@ export const getEmployeeByUniqueStringId = async (employeeId) => {
   return employees.find(emp => emp.employeeId.toUpperCase() === normalizedId) || null;
 };
 
-export const createEmployee = async (employeeData) => fetchData('/employees', {
-  method: 'POST',
-  body: JSON.stringify(employeeData)
-});
+export const createEmployee = async (employeeData) =>
+  fetchData('/employees', {
+    method: 'POST',
+    body: JSON.stringify(employeeData),
+  });
 
-export const updateEmployee = async (employeeId, employeeData) => fetchData(`/employees/${employeeId}`, {
-  method: 'PUT',
-  body: JSON.stringify(employeeData)
-});
+export const updateEmployee = async (employeeId, employeeData) =>
+  fetchData(`/employees/${employeeId}`, {
+    method: 'PUT',
+    body: JSON.stringify(employeeData),
+  });
 
-export const deleteEmployee = async (employeeId) => fetchData(`/employees/${employeeId}`, {
-  method: 'DELETE'
-});
+export const deleteEmployee = async (employeeId) =>
+  fetchData(`/employees/${employeeId}`, {
+    method: 'DELETE',
+  });
 
 // === ATTENDANCE ===
 export const getAllAttendanceRecords = async () => fetchData('/attendance');
+
+export const getAttendanceRecordById = async (id) => fetchData(`/attendance/${id}`);
 
 export const createAttendanceRecord = async (recordData) => {
   const backendFormatted = {
@@ -77,33 +84,36 @@ export const createAttendanceRecord = async (recordData) => {
     status: recordData.status,
     check_in_time: recordData.checkIn,
     check_out_time: recordData.checkOut,
-    details: recordData.details,
+    details: recordData.details || '',
   };
 
   return fetchData('/attendance', {
     method: 'POST',
-    body: JSON.stringify(backendFormatted)
-});
+    body: JSON.stringify(backendFormatted),
+  });
 };
 
 export const updateAttendanceRecord = async (id, recordData) => {
   const backendFormatted = {
     check_out_time: recordData.checkOut,
-    details: recordData.details,
+    details: recordData.details || '',
   };
 
   return fetchData(`/attendance/${id}`, {
     method: 'PUT',
-    body: JSON.stringify(backendFormatted)
+    body: JSON.stringify(backendFormatted),
   });
 };
 
-export const deleteAttendanceRecord = async (id) => fetchData(`/attendance/${id}`, {
-  method: 'DELETE'
-});
+export const deleteAttendanceRecord = async (id) =>
+  fetchData(`/attendance/${id}`, {
+    method: 'DELETE',
+  });
 
 // === LEAVES ===
 export const getAllLeaveRequests = async () => fetchData('/leaves');
+
+export const getLeaveRequestById = async (id) => fetchData(`/leaves/${id}`);
 
 export const createLeaveRequest = async (requestData) => {
   const backendFormatted = {
@@ -117,7 +127,7 @@ export const createLeaveRequest = async (requestData) => {
 
   return fetchData('/leaves', {
     method: 'POST',
-    body: JSON.stringify(backendFormatted)
+    body: JSON.stringify(backendFormatted),
   });
 };
 
@@ -133,10 +143,11 @@ export const updateLeaveRequest = async (id, requestData) => {
 
   return fetchData(`/leaves/${id}`, {
     method: 'PUT',
-    body: JSON.stringify(backendFormatted)
+    body: JSON.stringify(backendFormatted),
   });
 };
 
-export const deleteLeaveRequest = async (id) => fetchData(`/leaves/${id}`, {
-  method: 'DELETE'
-});
+export const deleteLeaveRequest = async (id) =>
+  fetchData(`/leaves/${id}`, {
+    method: 'DELETE',
+  });

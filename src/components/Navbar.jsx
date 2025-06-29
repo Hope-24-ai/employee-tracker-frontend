@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Navbar({ activeView, onSelectView }) {
+function Navbar({ activeView, onSelectView, role }) {
   return (
     <nav className="navbar">
       <button
@@ -9,12 +9,16 @@ function Navbar({ activeView, onSelectView }) {
       >
         My Profile
       </button>
-      <button
-        className={activeView === 'team' ? 'active' : ''}
-        onClick={() => onSelectView('team')}
-      >
-        Team Members
-      </button>
+
+      {role === 'HR Manager' && (
+        <button
+          className={activeView === 'team' ? 'active' : ''}
+          onClick={() => onSelectView('team')}
+        >
+          Team Members
+        </button>
+      )}
+
       <button
         className={activeView === 'attendanceLeave' ? 'active' : ''}
         onClick={() => onSelectView('attendanceLeave')}

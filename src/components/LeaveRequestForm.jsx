@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-
-import { createLeaveRequest } from '../utils/api'; 
+import { createLeaveRequest } from '../utils/api';
 
 function LeaveRequestForm({ employeeId, onSuccess }) {
   const [leaveType, setLeaveType] = useState('');
@@ -28,37 +27,31 @@ function LeaveRequestForm({ employeeId, onSuccess }) {
     if (!validateForm()) return;
 
     const newRequest = {
-      employeeId,
-      type: leaveType,
-      startDate,
-      endDate,
-      reason,
-      status: 'Pending', 
+      employee_id: employeeId,         // ✅ match backend
+      leave_type: leaveType,           // ✅ match backend
+      start_date: startDate,           // ✅ match backend
+      end_date: endDate,               // ✅ match backend
+      reason,                          // ✅
+      status: 'Pending'                // ✅ default
     };
 
     setSubmitting(true);
 
     try {
-      
       const data = await createLeaveRequest(newRequest);
+      if (onSuccess) onSuccess(data);
 
-      
-      if (onSuccess) {
-        onSuccess(data); 
-      }
-
-      
       setLeaveType('');
       setStartDate('');
       setEndDate('');
       setReason('');
-      setErrors({}); 
-      alert('Your leave request has been submitted successfully!'); 
+      setErrors({});
+      alert('Your leave request has been submitted successfully!');
     } catch (error) {
       console.error('Error submitting leave request:', error);
       alert(`Failed to submit leave request: ${error.message || 'Please try again.'}`);
     } finally {
-      setSubmitting(false); 
+      setSubmitting(false);
     }
   };
 

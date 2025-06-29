@@ -1,16 +1,14 @@
-import React from 'react'; 
+import React from 'react';
+
 function SignInOutButton({ clockedIn, onClockIn, onClockOut }) {
-  
   return (
-    <div>
+    <div className="sign-in-out">
       {clockedIn ? (
-        
         <button className="danger" onClick={onClockOut}>
           Clock Out
         </button>
       ) : (
-        
-        <button onClick={onClockIn}>
+        <button className="primary" onClick={onClockIn}>
           Clock In
         </button>
       )}

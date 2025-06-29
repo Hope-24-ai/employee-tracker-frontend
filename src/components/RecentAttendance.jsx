@@ -2,20 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { getAllAttendanceRecords } from '../utils/api'; 
 
 function RecentAttendance({ employeeId }) {
-  const [attendanceRecords, setAttendanceRecords] = useState([]);
+  const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null); 
 
   useEffect(() => {
     const fetchAttendanceData = async () => {
-      setLoading(true); 
-      setError(null);   
+      if (!employeeId) {
+        setError("No employee ID provided for attendance records.");
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      setError(null);
 
       try {
-        const allAttendance = await getAllAttendanceRecords();
+        const all = await getAllAttendanceRecords();
 
-        // 🛠 Convert backend keys to frontend-friendly format
-        const mappedAttendance = allAttendance.map((rec) => ({
+        // Normalize backend data keys
+        const mapped = all.map(rec => ({
           id: rec.id,
           employeeId: rec.employee_id,
           date: rec.date,
@@ -25,44 +31,25 @@ function RecentAttendance({ employeeId }) {
           details: rec.details,
         }));
 
-        const filteredAttendance = mappedAttendance.filter(
-          (rec) => rec.employeeId === employeeId
-        );
+        const mine = mapped.filter(rec => rec.employeeId === employeeId);
 
-        const sorted = filteredAttendance.sort((a, b) => {
-          const dateA = new Date(a.date);
-          const dateB = new Date(b.date);
-          return dateB.getTime() - dateA.getTime(); 
-        });
-
-        setAttendanceRecords(sorted);
+        // Sort by latest first
+        mine.sort((a, b) => new Date(b.date) - new Date(a.date));
+        setRecords(mine);
       } catch (err) {
         console.error('Error fetching attendance records:', err);
-        setError(`Failed to load attendance records: ${err.message}. Please try again.`);
+        setError(`Failed to load attendance records: ${err.message}`);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
-    if (employeeId) { 
-      fetchAttendanceData();
-    } else {
-      setLoading(false); 
-      setError("No employee ID provided for attendance records.");
-    }
-  }, [employeeId]); 
+    fetchAttendanceData();
+  }, [employeeId]);
 
-  if (loading) {
-    return <p>Loading attendance records...</p>;
-  }
-
-  if (error) {
-    return <p className="error-message">Error: {error}</p>;
-  }
-
-  if (!attendanceRecords || attendanceRecords.length === 0) {
-    return <p>No recent attendance records found.</p>;
-  }
+  if (loading) return <p>Loading attendance records...</p>;
+  if (error) return <p className="error-message">Error: {error}</p>;
+  if (records.length === 0) return <p>No recent attendance records found.</p>;
 
   return (
     <table>
@@ -76,13 +63,13 @@ function RecentAttendance({ employeeId }) {
         </tr>
       </thead>
       <tbody>
-        {attendanceRecords.map((record) => (
-          <tr key={record.id}>
-            <td>{record.date}</td>
-            <td className={`status-badge ${record.status}`}>{record.status}</td>
-            <td>{record.checkIn || '-'}</td>
-            <td>{record.checkOut || '-'}</td>
-            <td>{record.details || '-'}</td>
+        {records.map((rec) => (
+          <tr key={rec.id}>
+            <td>{rec.date}</td>
+            <td className={`status-badge ${rec.status}`}>{rec.status}</td>
+            <td>{rec.checkIn || '-'}</td>
+            <td>{rec.checkOut || '-'}</td>
+            <td>{rec.details || '-'}</td>
           </tr>
         ))}
       </tbody>

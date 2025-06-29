@@ -6,12 +6,12 @@ import EmployeeDashboard from './components/EmployeeDashboard';
 
 function AppRoutes({ employeeId, onLogin, onLogout }) {
   const navigate = useNavigate();
-  const initialLoad = useRef(true); // Prevent immediate navigation on first load
+  const initialLoad = useRef(true);
 
   useEffect(() => {
     if (initialLoad.current) {
       initialLoad.current = false;
-      return; // Avoid navigating on initial mount
+      return; // Prevent redirect on first render
     }
 
     if (employeeId) {
@@ -23,18 +23,23 @@ function AppRoutes({ employeeId, onLogin, onLogout }) {
 
   return (
     <Routes>
+      {/* Public route: Login */}
       <Route path="/" element={<LoginScreen onLogin={onLogin} />} />
+
+      {/* Protected route: Dashboard */}
       <Route
         path="/dashboard"
         element={
           employeeId ? (
             <EmployeeDashboard employeeId={employeeId} onLogout={onLogout} />
           ) : (
-            <Navigate to="/" />
+            <Navigate to="/" replace />
           )
         }
       />
-      <Route path="*" element={<Navigate to={employeeId ? '/dashboard' : '/'} />} />
+
+      {/* Catch-all: Redirect based on login status */}
+      <Route path="*" element={<Navigate to={employeeId ? '/dashboard' : '/'} replace />} />
     </Routes>
   );
 }

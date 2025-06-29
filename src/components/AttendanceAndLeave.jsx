@@ -4,96 +4,92 @@ import LeaveRequestForm from './LeaveRequestForm';
 import RecentAttendance from './RecentAttendance';
 import MyLeaveStatus from './MyLeaveStatus';
 
-
 import {
   getAllAttendanceRecords,
   createAttendanceRecord,
   updateAttendanceRecord,
   getAllLeaveRequests,
   createLeaveRequest,
-  
-} from '../utils/api'; 
+} from '../utils/api';
 
-function AttendanceAndLeave({ employeeId }) {
+function AttendanceAndLeave({ employeeId, role }) {
   const [myAttendance, setMyAttendance] = useState([]);
   const [myLeaveRequests, setMyLeaveRequests] = useState([]);
   const [clockedIn, setClockedIn] = useState(false);
   const [currentAttendanceRecordId, setCurrentAttendanceRecordId] = useState(null);
-  const [loading, setLoading] = useState(true); 
-  const [error, setError] = useState(null);   
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  
+  const isHR = role === 'Human Resource Manager';
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true); 
-      setError(null);   
+      setLoading(true);
+      setError(null);
       try {
-        
         const allAttendance = await getAllAttendanceRecords();
-        const filteredAttendance = allAttendance.filter(rec => rec.employeeId === employeeId);
-        setMyAttendance(filteredAttendance);
-
-        
         const allLeaves = await getAllLeaveRequests();
-        const filteredLeaves = allLeaves.filter(rec => rec.employeeId === employeeId);
-        setMyLeaveRequests(filteredLeaves);
 
-        
-        const today = new Date().toISOString().split('T')[0];
-        
-        const todayRecord = filteredAttendance.find(
-          rec => rec.date === today && rec.checkIn && !rec.checkOut
-        );
-
-        if (todayRecord) {
-          setClockedIn(true);
-          setCurrentAttendanceRecordId(todayRecord.id);
+        if (isHR) {
+          setMyAttendance(allAttendance);
+          setMyLeaveRequests(allLeaves);
         } else {
-          setClockedIn(false);
-          setCurrentAttendanceRecordId(null);
+          const filteredAttendance = allAttendance.filter(rec => rec.employeeId === employeeId);
+          const filteredLeaves = allLeaves.filter(rec => rec.employeeId === employeeId);
+
+          setMyAttendance(filteredAttendance);
+          setMyLeaveRequests(filteredLeaves);
+
+          const today = new Date().toISOString().split('T')[0];
+          const todayRecord = filteredAttendance.find(
+            rec => rec.date === today && rec.checkIn && !rec.checkOut
+          );
+
+          if (todayRecord) {
+            setClockedIn(true);
+            setCurrentAttendanceRecordId(todayRecord.id);
+          } else {
+            setClockedIn(false);
+            setCurrentAttendanceRecordId(null);
+          }
         }
       } catch (err) {
-        console.error("Error fetching attendance/leave data:", err);
-        setError(`Failed to load data: ${err.message}. Please try again.`);
+        console.error("Error fetching data:", err);
+        setError(`Failed to load data: ${err.message}`);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
-    if (employeeId) { 
-      fetchData();
-    }
-  }, [employeeId]); 
+    if (employeeId) fetchData();
+  }, [employeeId, isHR]);
 
   const handleClockIn = async () => {
-   
     if (clockedIn) {
       alert("You are already clocked in.");
       return;
     }
 
     const now = new Date();
-    const dateString = now.toISOString().split('T')[0]; 
+    const dateString = now.toISOString().split('T')[0];
     const timeString = now.toLocaleTimeString('en-US', {
       hour: '2-digit',
       minute: '2-digit',
       hour12: false,
-    }); 
+    });
 
     const newRecord = {
       employeeId,
       date: dateString,
-      status: 'Present', 
+      status: 'Present',
       checkIn: timeString,
-      checkOut: null, 
+      checkOut: null,
       details: 'Clocked In',
     };
 
     try {
-      
       const savedRecord = await createAttendanceRecord(newRecord);
-      setMyAttendance([...myAttendance, savedRecord]); 
+      setMyAttendance([...myAttendance, savedRecord]);
       setClockedIn(true);
       setCurrentAttendanceRecordId(savedRecord.id);
       alert(`Clocked in at ${timeString}`);
@@ -114,23 +110,18 @@ function AttendanceAndLeave({ employeeId }) {
       hour: '2-digit',
       minute: '2-digit',
       hour12: false,
-    }); 
+    });
 
-    const updatedData = {
-      checkOut: timeString,
-      
-    };
+    const updatedData = { checkOut: timeString };
 
     try {
-      
       const updatedRecord = await updateAttendanceRecord(currentAttendanceRecordId, updatedData);
-      
       const updatedAttendance = myAttendance.map(rec =>
         rec.id === updatedRecord.id ? updatedRecord : rec
       );
       setMyAttendance(updatedAttendance);
       setClockedIn(false);
-      setCurrentAttendanceRecordId(null); 
+      setCurrentAttendanceRecordId(null);
       alert(`Clocked out at ${timeString}`);
     } catch (err) {
       console.error("Error clocking out:", err);
@@ -141,14 +132,13 @@ function AttendanceAndLeave({ employeeId }) {
   const handleLeaveSubmit = async (leaveData) => {
     const newRequest = {
       ...leaveData,
-      employeeId, 
-      status: 'Pending', 
+      employeeId,
+      status: 'Pending',
     };
 
     try {
-      
       const savedRequest = await createLeaveRequest(newRequest);
-      setMyLeaveRequests([...myLeaveRequests, savedRequest]); 
+      setMyLeaveRequests([...myLeaveRequests, savedRequest]);
       alert('Your leave request has been submitted successfully!');
     } catch (err) {
       console.error("Error submitting leave request:", err);
@@ -156,42 +146,38 @@ function AttendanceAndLeave({ employeeId }) {
     }
   };
 
-  
-  if (loading) {
-    return <div className="card">Loading attendance and leave data...</div>;
-  }
-
-  if (error) {
-    return <div className="card error-message">Error: {error}</div>;
-  }
+  if (loading) return <div className="card">Loading attendance and leave data...</div>;
+  if (error) return <div className="card error-message">Error: {error}</div>;
 
   return (
     <div className="card">
       <h2>Attendance & Leave Management</h2>
 
-      <div className="card" style={{ marginBottom: '25px' }}>
-        <h3>Your Daily Status</h3>
-        <p>Manage your daily attendance here.</p>
-        <SignInOutButton
-          clockedIn={clockedIn}
-          onClockIn={handleClockIn}
-          onClockOut={handleClockOut}
-        />
-      </div>
+      {!isHR && (
+        <>
+          <div className="card" style={{ marginBottom: '25px' }}>
+            <h3>Your Daily Status</h3>
+            <SignInOutButton
+              clockedIn={clockedIn}
+              onClockIn={handleClockIn}
+              onClockOut={handleClockOut}
+            />
+          </div>
 
-      <div className="card" style={{ marginBottom: '25px' }}>
-        <h3>Request New Leave / Day Off</h3>
-        <LeaveRequestForm onSubmit={handleLeaveSubmit} employeeId={employeeId} />
-      </div>
+          <div className="card" style={{ marginBottom: '25px' }}>
+            <h3>Request New Leave / Day Off</h3>
+            <LeaveRequestForm onSubmit={handleLeaveSubmit} employeeId={employeeId} />
+          </div>
+        </>
+      )}
 
       <div className="card">
-        <h3>Your Recent Attendance</h3>
-        {/* Ensure RecentAttendance can handle the full attendance record with checkIn/checkOut */}
+        <h3>{isHR ? 'All Attendance Records' : 'Your Recent Attendance'}</h3>
         <RecentAttendance attendanceData={myAttendance} />
       </div>
 
       <div className="card">
-        <h3>Your Submitted Leave Requests</h3>
+        <h3>{isHR ? 'All Leave Requests' : 'Your Submitted Leave Requests'}</h3>
         <MyLeaveStatus leaveRequests={myLeaveRequests} />
       </div>
     </div>

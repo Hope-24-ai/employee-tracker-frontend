@@ -13,45 +13,40 @@ function MyLeaveStatus({ employeeId }) {
 
       try {
         const allLeaves = await getAllLeaveRequests();
-        const filteredLeaves = allLeaves.filter(rec => rec.employee_id === employeeId);
+
+        const filteredLeaves = allLeaves.filter(
+          (rec) => rec.employee_id === employeeId
+        );
 
         const sorted = filteredLeaves.sort((a, b) => {
           const dateA = new Date(a.created_at || a.start_date);
           const dateB = new Date(b.created_at || b.start_date);
-          return dateB - dateA; 
+          return dateB - dateA;
         });
 
         setLeaveRequests(sorted);
       } catch (err) {
         console.error("Failed to fetch leave requests:", err);
-        setError(`Failed to load leave requests: ${err.message}. Please try again.`);
+        setError(`Failed to load leave requests: ${err.message}`);
       } finally {
         setLoading(false); 
       }
     };
 
-    if (employeeId) { 
+    if (employeeId) {
       fetchLeaveData();
     } else {
-        setLoading(false); 
-        setError("No employee ID provided for leave status.");
+      setError("No employee ID provided for leave status.");
+      setLoading(false);
     }
   }, [employeeId]); 
 
-  if (loading) {
-    return <p>Loading leave requests...</p>;
-  }
-
-  if (error) {
-    return <p className="error-message">Error: {error}</p>;
-  }
-
-  if (!leaveRequests || leaveRequests.length === 0) {
-    return <p>You have no submitted leave requests.</p>;
-  }
+  if (loading) return <p>Loading leave requests...</p>;
+  if (error) return <p className="error-message">Error: {error}</p>;
+  if (!leaveRequests.length) return <p>You have no submitted leave requests.</p>;
 
   return (
-    <table>
+    <table className="leave-status-table">
       <thead>
         <tr>
           <th>Type</th>
@@ -74,7 +69,9 @@ function MyLeaveStatus({ employeeId }) {
                 ? new Date(request.created_at).toLocaleDateString()
                 : 'N/A'}
             </td>
-            <td className={`status-badge ${request.status}`}>{request.status}</td>
+            <td className={`status-badge ${request.status.toLowerCase()}`}>
+              {request.status}
+            </td>
           </tr>
         ))}
       </tbody>
