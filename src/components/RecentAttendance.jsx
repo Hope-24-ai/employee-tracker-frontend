@@ -10,16 +10,26 @@ function RecentAttendance({ employeeId }) {
     const fetchAttendanceData = async () => {
       setLoading(true); 
       setError(null);   
+
       try {
-        
         const allAttendance = await getAllAttendanceRecords();
 
-        
-        const filteredAttendance = allAttendance.filter(rec => rec.employeeId === employeeId);
+        // 🛠 Convert backend keys to frontend-friendly format
+        const mappedAttendance = allAttendance.map((rec) => ({
+          id: rec.id,
+          employeeId: rec.employee_id,
+          date: rec.date,
+          status: rec.status,
+          checkIn: rec.check_in_time,
+          checkOut: rec.check_out_time,
+          details: rec.details,
+        }));
 
-        
+        const filteredAttendance = mappedAttendance.filter(
+          (rec) => rec.employeeId === employeeId
+        );
+
         const sorted = filteredAttendance.sort((a, b) => {
-          
           const dateA = new Date(a.date);
           const dateB = new Date(b.date);
           return dateB.getTime() - dateA.getTime(); 
@@ -37,12 +47,11 @@ function RecentAttendance({ employeeId }) {
     if (employeeId) { 
       fetchAttendanceData();
     } else {
-        setLoading(false); 
-        setError("No employee ID provided for attendance records.");
+      setLoading(false); 
+      setError("No employee ID provided for attendance records.");
     }
   }, [employeeId]); 
 
-  
   if (loading) {
     return <p>Loading attendance records...</p>;
   }
@@ -71,9 +80,9 @@ function RecentAttendance({ employeeId }) {
           <tr key={record.id}>
             <td>{record.date}</td>
             <td className={`status-badge ${record.status}`}>{record.status}</td>
-            <td>{record.checkIn || '-'}</td> {}
-            <td>{record.checkOut || '-'}</td> {}
-            <td>{record.details || '-'}</td> {}
+            <td>{record.checkIn || '-'}</td>
+            <td>{record.checkOut || '-'}</td>
+            <td>{record.details || '-'}</td>
           </tr>
         ))}
       </tbody>

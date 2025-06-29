@@ -12,17 +12,12 @@ function MyLeaveStatus({ employeeId }) {
       setError(null);   
 
       try {
-        
         const allLeaves = await getAllLeaveRequests();
+        const filteredLeaves = allLeaves.filter(rec => rec.employee_id === employeeId);
 
-        
-        const filteredLeaves = allLeaves.filter(rec => rec.employeeId === employeeId);
-
-        
         const sorted = filteredLeaves.sort((a, b) => {
-          
-          const dateA = new Date(a.submissionDate);
-          const dateB = new Date(b.submissionDate);
+          const dateA = new Date(a.created_at || a.start_date);
+          const dateB = new Date(b.created_at || b.start_date);
           return dateB - dateA; 
         });
 
@@ -43,7 +38,6 @@ function MyLeaveStatus({ employeeId }) {
     }
   }, [employeeId]); 
 
-  
   if (loading) {
     return <p>Loading leave requests...</p>;
   }
@@ -64,23 +58,21 @@ function MyLeaveStatus({ employeeId }) {
           <th>Start Date</th>
           <th>End Date</th>
           <th>Reason</th>
-          <th>Submission Date</th> {}
+          <th>Submission Date</th>
           <th>Status</th>
         </tr>
       </thead>
       <tbody>
         {leaveRequests.map((request) => (
           <tr key={request.id}>
-            <td>{request.type}</td>
-            <td>{request.startDate}</td>
-            <td>{request.endDate}</td>
+            <td>{request.leave_type}</td>
+            <td>{request.start_date}</td>
+            <td>{request.end_date}</td>
             <td>{request.reason}</td>
-            {}
             <td>
-              {request.submissionDate
-                ? new Date(request.submissionDate).toLocaleDateString()
-                : 'N/A'
-              }
+              {request.created_at
+                ? new Date(request.created_at).toLocaleDateString()
+                : 'N/A'}
             </td>
             <td className={`status-badge ${request.status}`}>{request.status}</td>
           </tr>

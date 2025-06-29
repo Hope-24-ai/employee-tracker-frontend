@@ -70,15 +70,33 @@ export const deleteEmployee = async (employeeId) => fetchData(`/employees/${empl
 // === ATTENDANCE ===
 export const getAllAttendanceRecords = async () => fetchData('/attendance');
 
-export const createAttendanceRecord = async (recordData) => fetchData('/attendance', {
-  method: 'POST',
-  body: JSON.stringify(recordData)
-});
+export const createAttendanceRecord = async (recordData) => {
+  const backendFormatted = {
+    employee_id: recordData.employeeId,
+    date: recordData.date,
+    status: recordData.status,
+    check_in_time: recordData.checkIn,
+    check_out_time: recordData.checkOut,
+    details: recordData.details,
+  };
 
-export const updateAttendanceRecord = async (id, recordData) => fetchData(`/attendance/${id}`, {
-  method: 'PUT',
-  body: JSON.stringify(recordData)
+  return fetchData('/attendance', {
+    method: 'POST',
+    body: JSON.stringify(backendFormatted)
 });
+};
+
+export const updateAttendanceRecord = async (id, recordData) => {
+  const backendFormatted = {
+    check_out_time: recordData.checkOut,
+    details: recordData.details,
+  };
+
+  return fetchData(`/attendance/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(backendFormatted)
+  });
+};
 
 export const deleteAttendanceRecord = async (id) => fetchData(`/attendance/${id}`, {
   method: 'DELETE'
@@ -87,15 +105,37 @@ export const deleteAttendanceRecord = async (id) => fetchData(`/attendance/${id}
 // === LEAVES ===
 export const getAllLeaveRequests = async () => fetchData('/leaves');
 
-export const createLeaveRequest = async (requestData) => fetchData('/leaves', {
-  method: 'POST',
-  body: JSON.stringify(requestData)
-});
+export const createLeaveRequest = async (requestData) => {
+  const backendFormatted = {
+    employee_id: requestData.employeeId,
+    leave_type: requestData.type,
+    start_date: requestData.startDate,
+    end_date: requestData.endDate,
+    status: requestData.status,
+    reason: requestData.reason,
+  };
 
-export const updateLeaveRequest = async (id, requestData) => fetchData(`/leaves/${id}`, {
-  method: 'PUT',
-  body: JSON.stringify(requestData)
-});
+  return fetchData('/leaves', {
+    method: 'POST',
+    body: JSON.stringify(backendFormatted)
+  });
+};
+
+export const updateLeaveRequest = async (id, requestData) => {
+  const backendFormatted = {
+    employee_id: requestData.employeeId,
+    leave_type: requestData.type,
+    start_date: requestData.startDate,
+    end_date: requestData.endDate,
+    status: requestData.status,
+    reason: requestData.reason,
+  };
+
+  return fetchData(`/leaves/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(backendFormatted)
+  });
+};
 
 export const deleteLeaveRequest = async (id) => fetchData(`/leaves/${id}`, {
   method: 'DELETE'
