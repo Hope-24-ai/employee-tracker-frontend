@@ -1,41 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
-  BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer,
-} from 'recharts';
-import {
-  FaUsers, FaBuilding, FaCalendarCheck, FaSearch,
-} from 'react-icons/fa';
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import { FaUsers, FaBuilding, FaCalendarCheck, FaSearch } from "react-icons/fa";
 
 const attendanceData = [
-  { day: 'Mon', employees: 100 },
-  { day: 'Tue', employees: 97 },
-  { day: 'Wed', employees: 105 },
-  { day: 'Thu', employees: 92 },
-  { day: 'Fri', employees: 110 },
+  { day: "Mon", employees: 100 },
+  { day: "Tue", employees: 97 },
+  { day: "Wed", employees: 105 },
+  { day: "Thu", employees: 92 },
+  { day: "Fri", employees: 110 },
 ];
 
 const recentActivity = [
-  { name: 'Ali Hassan', action: 'Checked in', time: '9:05 AM' },
-  { name: 'Nadia Yusuf', action: 'Checked out', time: '2:15 PM' },
-  { name: 'Ahmed Warsame', action: 'Checked in', time: '8:47 AM' },
+  { name: "Ali Hassan", action: "Checked in", time: "9:05 AM" },
+  { name: "Nadia Yusuf", action: "Checked out", time: "2:15 PM" },
+  { name: "Ahmed Warsame", action: "Checked in", time: "8:47 AM" },
 ];
 
-const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7f50'];
+const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff7f50"];
 
-export default function Dashboard() {
+export default function ManagerDashboard() {
   const [employees, setEmployees] = useState([
-    { id: 1, name: 'Ali Hassan', role: 'Developer', department: 'Engineering' },
-    { id: 2, name: 'Nadia Yusuf', role: 'HR Manager', department: 'HR' },
-    { id: 3, name: 'Ahmed Warsame', role: 'Accountant', department: 'Finance' },
+    { id: 1, name: "Ali Hassan", role: "Developer", department: "Engineering" },
+    { id: 2, name: "Nadia Yusuf", role: "HR Manager", department: "HR" },
+    { id: 3, name: "Ahmed Warsame", role: "Accountant", department: "Finance" },
   ]);
 
-  const [newEmployee, setNewEmployee] = useState({ name: '', role: '', department: '' });
+  const [newEmployee, setNewEmployee] = useState({
+    name: "",
+    role: "",
+    department: "",
+  });
 
   const addEmployee = () => {
     const id = Date.now();
-    if (!newEmployee.name || !newEmployee.role || !newEmployee.department) return;
+    if (!newEmployee.name || !newEmployee.role || !newEmployee.department)
+      return;
     setEmployees([...employees, { ...newEmployee, id }]);
-    setNewEmployee({ name: '', role: '', department: '' });
+    setNewEmployee({ name: "", role: "", department: "" });
   };
 
   const deleteEmployee = (id) => {
@@ -43,10 +54,12 @@ export default function Dashboard() {
   };
 
   const downloadData = () => {
-    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(employees, null, 2));
-    const anchor = document.createElement('a');
-    anchor.setAttribute('href', dataStr);
-    anchor.setAttribute('download', 'employees.json');
+    const dataStr =
+      "data:text/json;charset=utf-8," +
+      encodeURIComponent(JSON.stringify(employees, null, 2));
+    const anchor = document.createElement("a");
+    anchor.setAttribute("href", dataStr);
+    anchor.setAttribute("download", "employees.json");
     document.body.appendChild(anchor);
     anchor.click();
     anchor.remove();
@@ -79,7 +92,7 @@ export default function Dashboard() {
           <div>
             <div className="text-sm text-gray-500">Departments</div>
             <div className="text-xl font-semibold">
-              {[...new Set(employees.map(emp => emp.department))].length}
+              {[...new Set(employees.map((emp) => emp.department))].length}
             </div>
           </div>
         </div>
@@ -98,12 +111,22 @@ export default function Dashboard() {
       {/* Charts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white shadow-md p-4 rounded-2xl">
-          <h2 className="text-lg font-semibold mb-2">Employees by Department</h2>
+          <h2 className="text-lg font-semibold mb-2">
+            Employees by Department
+          </h2>
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
-              <Pie data={departmentData} dataKey="value" nameKey="name" outerRadius={80}>
+              <Pie
+                data={departmentData}
+                dataKey="value"
+                nameKey="name"
+                outerRadius={80}
+              >
                 {departmentData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
                 ))}
               </Pie>
               <Tooltip />
@@ -165,21 +188,27 @@ export default function Dashboard() {
             type="text"
             placeholder="Name"
             value={newEmployee.name}
-            onChange={(e) => setNewEmployee({ ...newEmployee, name: e.target.value })}
+            onChange={(e) =>
+              setNewEmployee({ ...newEmployee, name: e.target.value })
+            }
             className="border p-2 rounded-md"
           />
           <input
             type="text"
             placeholder="Role"
             value={newEmployee.role}
-            onChange={(e) => setNewEmployee({ ...newEmployee, role: e.target.value })}
+            onChange={(e) =>
+              setNewEmployee({ ...newEmployee, role: e.target.value })
+            }
             className="border p-2 rounded-md"
           />
           <input
             type="text"
             placeholder="Department"
             value={newEmployee.department}
-            onChange={(e) => setNewEmployee({ ...newEmployee, department: e.target.value })}
+            onChange={(e) =>
+              setNewEmployee({ ...newEmployee, department: e.target.value })
+            }
             className="border p-2 rounded-md"
           />
         </div>
