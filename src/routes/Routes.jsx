@@ -8,13 +8,22 @@ import {
 } from "react-router-dom";
 
 import Login from "../pages/Login";
-import ManagerLayout from "../layouts/ManagerLayout";
+// import ManagerLayout from "../layouts/ManagerLayout";  ----->not in use anymore
+import DepartmentManager from "../pages/DepartmentManager";
 import EmployeeReviews from "../pages/EmployeeReviews";
 import AllEmployees from "../pages/DepartmentEmployees";
-// import Attendance from "../pages/Attendance";
 import AddReview from "../pages/AddReview";
+// import Attendance from "../pages/Attendance";
 
-// Get user type name safely from localStorage
+// employee
+
+import EmployeeDashboard from "../pages/EmployeeDashboard";
+import EmployeeProfile from "../pages/EmployeeProfile";
+import MyReviews from "../pages/MyReviews";
+import MyAttendance from "../pages/MyAttendance";
+
+
+// Get user type name  from localStorage
 const getUserRoleType = () => {
   try {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -42,13 +51,13 @@ const AppRoutes = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-
-        {/* Protected Manager Layout with Nested Routes */}
+        Manager
         <Route
           path="/manager"
           element={
             <ProtectedRoute allowedType="Manager">
-              <ManagerLayout />
+              {/* <ManagerLayout /> */}
+              <DepartmentManager />
             </ProtectedRoute>
           }
         >
@@ -56,6 +65,19 @@ const AppRoutes = () => {
           <Route path="employees" element={<AllEmployees />} />
           {/* <Route path="attendance" element={<Attendance />} /> */}
           <Route path="add-review" element={<AddReview />} />
+        </Route>
+        {/* employee */}
+        <Route
+          path="/employee"
+          element={
+            <ProtectedRoute allowedType="Employee">
+              <EmployeeDashboard />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="profile" element={<EmployeeProfile />} />
+          <Route path="reviews" element={<MyReviews />} />
+          <Route path="attendance" element={<MyAttendance />} />
         </Route>
       </Routes>
     </Router>

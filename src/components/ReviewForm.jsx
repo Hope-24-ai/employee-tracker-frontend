@@ -46,7 +46,6 @@ export default function ReviewForm() {
       });
   };
 
-  // Fields
   const fields = [
     {
       name: "employee_id",
@@ -63,7 +62,7 @@ export default function ReviewForm() {
       type: "select",
       options: [5, 4, 3, 2, 1].map((star) => ({
         value: star,
-        label: `${star} Stars`,
+        label: `${star} Star${star > 1 ? "s" : ""}`,
       })),
     },
     {
@@ -75,53 +74,57 @@ export default function ReviewForm() {
   ];
 
   return (
-    <div className="p-6">
-      <h2 className="text-xl font-bold mb-4">Add New Performance Review</h2>
+    <div className="w-full flex justify-center px-4">
+      <div className="w-full max-w-2xl bg-white p-6 rounded-xl shadow mt-0">
+        <h2 className="text-2xl font-bold mb-4 text-blue-900">
+          Add New Performance Review
+        </h2>
 
-      {successMsg && <p className="text-green-600 mb-2">{successMsg}</p>}
-      {errorMsg && <p className="text-red-600 mb-2">{errorMsg}</p>}
+        {successMsg && <p className="text-green-600 mb-3">{successMsg}</p>}
+        {errorMsg && <p className="text-red-600 mb-3">{errorMsg}</p>}
 
-      <form onSubmit={handleSubmit} className="space-y-4 max-w-lg">
-        {fields.map((field) => (
-          <div key={field.name}>
-            <label className="block mb-1 text-sm font-medium">
-              {field.label}
-            </label>
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {fields.map((field) => (
+            <div key={field.name}>
+              <label className="block mb-1 text-sm font-medium text-gray-700">
+                {field.label}
+              </label>
 
-            {field.type === "select" && (
-              <select
-                value={formData[field.name]}
-                onChange={(e) => handleChange(field.name, e.target.value)}
-                className="w-full p-2 border rounded"
-              >
-                <option value="">-- Select --</option>
-                {field.options.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-            )}
+              {field.type === "select" && (
+                <select
+                  value={formData[field.name]}
+                  onChange={(e) => handleChange(field.name, e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300"
+                >
+                  <option value="">-- Select --</option>
+                  {field.options.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              )}
 
-            {field.type === "textarea" && (
-              <textarea
-                value={formData[field.name]}
-                onChange={(e) => handleChange(field.name, e.target.value)}
-                className="w-full p-2 border rounded"
-                rows="4"
-                placeholder={field.placeholder}
-              />
-            )}
-          </div>
-        ))}
+              {field.type === "textarea" && (
+                <textarea
+                  value={formData[field.name]}
+                  onChange={(e) => handleChange(field.name, e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300"
+                  rows="4"
+                  placeholder={field.placeholder}
+                />
+              )}
+            </div>
+          ))}
 
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Submit Review
-        </button>
-      </form>
+          <button
+            type="submit"
+            className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition"
+          >
+            Submit Review
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
