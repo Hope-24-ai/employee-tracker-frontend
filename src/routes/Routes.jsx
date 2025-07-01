@@ -1,4 +1,4 @@
-// src/routes/AppRoutes.jsx
+
 import {
   useLocation,
   BrowserRouter as Router,
@@ -10,9 +10,12 @@ import {
 import Login from "../pages/Login";
 // import ManagerLayout from "../layouts/ManagerLayout";  ----->not in use anymore
 import DepartmentManager from "../pages/DepartmentManagerDashboard";
+import HumanResourcesDashboard from "../pages/HumanResourceDashBoard";
 import EmployeeReviews from "../pages/EmployeeReviews";
 import AllEmployees from "../pages/DepartmentEmployees";
 import AddReview from "../pages/AddReview";
+import HRAllPerformanceReviews from "../pages/HRAllPerformanceReviews";
+import HRAllEmployees from "../pages/HRAllEmployees";
 // import Attendance from "../pages/Attendance";
 
 // employee
@@ -77,6 +80,22 @@ const AppRoutes = () => {
           <Route path="profile" element={<EmployeeProfile />} />
           <Route path="reviews" element={<MyReviews />} />
           <Route path="attendance" element={<MyAttendance />} />
+        </Route>
+        {/* HR Dashboard and its nested routes */}
+        <Route
+          path="/hr"
+          element={
+            <ProtectedRoute allowedType="HR">
+              <HumanResourcesDashboard />
+            </ProtectedRoute>
+          }
+        >
+          {/* Nested route for HR to view ALL performance reviews */}
+          <Route
+            path="performance-reviews"
+            element={<HRAllPerformanceReviews />}
+          />
+          <Route path="all-employees" element={<HRAllEmployees />} />
         </Route>
       </Routes>
     </Router>
