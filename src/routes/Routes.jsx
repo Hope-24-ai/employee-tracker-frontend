@@ -9,7 +9,7 @@ import {
 
 import Login from "../pages/Login";
 // import ManagerLayout from "../layouts/ManagerLayout";  ----->not in use anymore
-import DepartmentManager from "../pages/DepartmentManager";
+import DepartmentManager from "../pages/DepartmentManagerDashboard";
 import EmployeeReviews from "../pages/EmployeeReviews";
 import AllEmployees from "../pages/DepartmentEmployees";
 import AddReview from "../pages/AddReview";
@@ -21,7 +21,6 @@ import EmployeeDashboard from "../pages/EmployeeDashboard";
 import EmployeeProfile from "../pages/EmployeeProfile";
 import MyReviews from "../pages/MyReviews";
 import MyAttendance from "../pages/MyAttendance";
-
 
 // Get user type name  from localStorage
 const getUserRoleType = () => {
