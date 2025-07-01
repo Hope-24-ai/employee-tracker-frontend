@@ -44,7 +44,7 @@ function Login({ setUser }) {
       } else if (roleType === "Employee") {
         navigate("/employee");
       } else if (roleType === "HR") {
-        navigate("/humanResource");
+        navigate("/hr");
       } else {
         navigate("/");
       }

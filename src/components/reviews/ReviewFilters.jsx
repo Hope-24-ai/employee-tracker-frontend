@@ -1,4 +1,4 @@
-export default function ReviewFilters({ filters, setFilters }) {
+export default function ReviewFilters({ filters, setFilters ,departmentOptions =[]}) {
   const fields = [
     {
       label: "Filter by Year",
@@ -20,6 +20,12 @@ export default function ReviewFilters({ filters, setFilters }) {
       key: "name",
       inputType: "input",
     },
+    {
+      label: "Filter by Department",
+      key: "department", 
+      inputType: "select",
+      options: departmentOptions, 
+    },
   ];
 
   return (
@@ -40,15 +46,17 @@ export default function ReviewFilters({ filters, setFilters }) {
               }
             />
           ) : (
+              // select inputs
             <select
               className="border p-2 rounded w-32"
               value={filters[field.key]}
               onChange={(e) =>
                 setFilters((prev) => ({ ...prev, [field.key]: e.target.value }))
               }
-            >
+              >
+                {/* default option */}
               <option value="">All</option>
-              {field.options
+              {field.options 
                 .filter((opt) => opt !== "")
                 .map((opt) => (
                   <option key={opt} value={opt}>

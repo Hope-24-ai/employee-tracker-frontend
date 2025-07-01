@@ -29,26 +29,27 @@ const ReviewCard = ({ review }) => {
 
   return (
     <div className="bg-white shadow-md rounded-xl p-5 border border-gray-200">
-      {/* Only show employee details if viewer is a Manager */}
-      {role === "Manager" && (
-        <div className="mb-3 space-y-1 text-sm text-gray-800">
-          <div className="flex items-center gap-2">
-            <FaUserAlt className="text-purple-600" />
-            <span className="font-semibold">Employee:</span>{" "}
-            {review.employee_name}
+      {/* Only show employee details if viewer is a Manager oR HR */}
+      {role === "Manager" ||
+        (role === "HR" && (
+          <div className="mb-3 space-y-1 text-sm text-gray-800">
+            <div className="flex items-center gap-2">
+              <FaUserAlt className="text-purple-600" />
+              <span className="font-semibold">Employee:</span>{" "}
+              {review.employee_name}
+            </div>
+            <div className="flex items-center gap-2">
+              <FaBriefcase className="text-green-600" />
+              <span className="font-semibold">Title:</span>{" "}
+              {review.employee_job_title || "N/A"}
+            </div>
+            <div className="flex items-center gap-2">
+              <FaBuilding className="text-blue-600" />
+              <span className="font-semibold">Department:</span>{" "}
+              {review.employee_department || "N/A"}
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <FaBriefcase className="text-green-600" />
-            <span className="font-semibold">Title:</span>{" "}
-            {review.employee_job_title || "N/A"}
-          </div>
-          <div className="flex items-center gap-2">
-            <FaBuilding className="text-blue-600" />
-            <span className="font-semibold">Department:</span>{" "}
-            {review.employee_department || "N/A"}
-          </div>
-        </div>
-      )}
+        ))}
 
       {/* Reviewer */}
       <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
