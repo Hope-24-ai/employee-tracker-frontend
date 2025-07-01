@@ -17,6 +17,7 @@ import AddReview from "../pages/AddReview";
 import HRAllPerformanceReviews from "../pages/HRAllPerformanceReviews";
 import HRAllEmployees from "../pages/HRAllEmployees";
 // import Attendance from "../pages/Attendance";
+import AddEmployeePage from "../pages/AddEmployeePage";
 
 // employee
 
@@ -96,6 +97,7 @@ const AppRoutes = () => {
             element={<HRAllPerformanceReviews />}
           />
           <Route path="all-employees" element={<HRAllEmployees />} />
+          <Route path="add-employee" element={<AddEmployeePage />} />
         </Route>
       </Routes>
     </Router>
