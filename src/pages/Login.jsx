@@ -12,7 +12,7 @@ function Login({ setUser }) {
     {
       name: "email",
       type: "email",
-      placeholder: "Email",
+      placeholder: "Email address",
       value: email,
       onChange: (e) => setEmail(e.target.value),
     },
@@ -49,38 +49,67 @@ function Login({ setUser }) {
         navigate("/");
       }
     } catch (err) {
-      if (err.response?.data?.error) {
-        setError(err.response.data.error);
-      } else {
-        setError("Invalid email or password.");
-      }
+      setError(err.response?.data?.error || "Invalid email or password.");
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
-      <h2 className="text-2xl font-bold mb-4">Login</h2>
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
+      <div
+        className="absolute inset-0 opacity-10"
+        style={{
+          backgroundImage:
+            'url("https://www.transparenttextures.com/patterns/cubes.png")',
+        }}
+      ></div>
+
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-sm bg-white p-6 rounded shadow"
+        className="relative z-10 bg-gray-800 rounded-lg shadow-2xl p-8 sm:p-10 w-full max-w-md border border-gray-700"
       >
+        <h1 className="text-3xl font-extrabold text-white text-center mb-3">
+          Welcome
+        </h1>
+        <p className="text-center mb-8 text-gray-400">
+          Sign in to your account
+        </p>
+
         {fields.map((field) => (
-          <input
-            key={field.name}
-            type={field.type}
-            placeholder={field.placeholder}
-            value={field.value}
-            onChange={field.onChange}
-            className="mb-4 w-full border p-2 rounded"
-          />
+          <div key={field.name} className="mb-5">
+            <label htmlFor={field.name} className="sr-only">
+              {field.placeholder}
+            </label>
+            <input
+              id={field.name}
+              type={field.type}
+              placeholder={field.placeholder}
+              value={field.value}
+              onChange={field.onChange}
+              required
+              className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-md placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out"
+            />
+          </div>
         ))}
-        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+
+        {error && (
+          <p className="text-red-400 text-sm text-center mb-4">{error}</p>
+        )}
+
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-md shadow-md transition duration-150 ease-in-out text-lg"
         >
           Login
         </button>
+
+        <div className="text-center mt-6 text-sm text-gray-500">
+          <a
+            href="#"
+            className="text-indigo-400 hover:text-indigo-300 hover:underline font-medium"
+          >
+            Forgot your password?
+          </a>
+        </div>
       </form>
     </div>
   );
