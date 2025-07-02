@@ -1,10 +1,11 @@
 import { Outlet, Link } from "react-router-dom";
 import {
-  UserPlus, 
-  Users, 
-  FileText, 
-  CalendarCheck, 
-  ClipboardList, 
+  UserPlus,
+  Users,
+  FileText,
+  CalendarCheck,
+  ClipboardList,
+  Building,
 } from "lucide-react";
 import HrNavbar from "../components/HrNavbar";
 import { useEffect, useState } from "react";
@@ -12,18 +13,18 @@ import axios from "../services/api"; // Import axios
 
 export default function HumanResourcesDashboard() {
   const [totalEmployees, setTotalEmployees] = useState(0);
-  const [loadingTotal, setLoadingTotal] = useState(true); 
+  const [loadingTotal, setLoadingTotal] = useState(true);
 
   useEffect(() => {
     const fetchTotalEmployees = async () => {
       try {
         setLoadingTotal(true);
-        
+
         const response = await axios.get("/total-employees");
         setTotalEmployees(response.data.total_employees);
       } catch (error) {
         console.error("Failed to fetch total employees:", error);
-        
+
         setTotalEmployees(0);
       } finally {
         setLoadingTotal(false);
@@ -41,10 +42,10 @@ export default function HumanResourcesDashboard() {
       description: "Onboard new team members.",
     },
     {
-      to: "/hr/all-employees", 
-      label: "Company Staff Members", 
+      to: "/hr/all-employees",
+      label: "Company Staff Members",
       icon: <Users size={28} />,
-      description: "View all staff across the company.", 
+      description: "View all staff across the company.",
     },
     {
       to: "/hr/leave-approvals",
@@ -63,6 +64,18 @@ export default function HumanResourcesDashboard() {
       label: "Employee Attendance",
       icon: <CalendarCheck size={28} />,
       description: "Monitor and manage employee attendance records.",
+    },
+    {
+      to: "/hr/add-department",
+      label: "Add New Department",
+      icon: <Building size={28} />,
+      description: "Create a new organizational department.",
+    },
+    {
+      to: "/hr/departments",
+      label: "Company Departments",
+      icon: <Building size={28} />,
+      description: "View all departments in the company.",
     },
   ];
 
