@@ -1,4 +1,3 @@
-
 import {
   useLocation,
   BrowserRouter as Router,
@@ -18,6 +17,9 @@ import HRAllPerformanceReviews from "../pages/HRAllPerformanceReviews";
 import HRAllEmployees from "../pages/HRAllEmployees";
 // import Attendance from "../pages/Attendance";
 import AddEmployeePage from "../pages/AddEmployeePage";
+// dpt
+import DepartmentListForManager from "../pages/DepartmentListForManager";
+import AddDepartmentPage from "../pages/AddDepartmentForm";
 
 // employee
 
@@ -98,6 +100,8 @@ const AppRoutes = () => {
           />
           <Route path="all-employees" element={<HRAllEmployees />} />
           <Route path="add-employee" element={<AddEmployeePage />} />
+          <Route path="add-department" element={<AddDepartmentPage />} />
+          <Route path="departments" element={<DepartmentListForManager />} />
         </Route>
       </Routes>
     </Router>
